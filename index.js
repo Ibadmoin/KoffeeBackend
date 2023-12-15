@@ -18,6 +18,9 @@ app.use(cors())
 app.use('/api/users',UserRouter);
 app.use('/api/data',dataRouter);
 app.use('/api/product',productRouter);
+app.use('/',(req,res)=>{
+    res.send("Redirecting")
+})
 
 
 // connecting with database
