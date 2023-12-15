@@ -6,6 +6,11 @@ const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+// Images paths should be in assets/images
+// make sure to upload png images
+// cd utils then node bulkScript.js
+
+
 cloudinary.config({ 
     cloud_name: 'dfhvlndon', 
     api_key: process.env.CLOUDNARY_KEY, 
