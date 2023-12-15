@@ -14,6 +14,7 @@ const userlist = [
 ]
 
 userRouter.get('/users',(req, res)=>{
+ 
     res.json(userlist)
 })
 

@@ -6,6 +6,8 @@ const app = express()
 require('dotenv').config({path:'./.env'})
 const Port = 8000 || process.env.Port;
 const UserRouter = require('./routes/userRoutes');
+const dataRouter = require('./routes/dataRoutes');
+const productRouter = require('./controller/productController');
 
 app.use(express.json())
 app.use(cors())
@@ -13,7 +15,10 @@ app.use(cors())
 
 
 // Apis
-app.use('/api',UserRouter);
+app.use('/api/users',UserRouter);
+app.use('/api/data',dataRouter);
+app.use('/api/product',productRouter);
+
 
 // connecting with database
 ConnectDb();
