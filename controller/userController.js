@@ -224,20 +224,24 @@ const authController = {
             if(error){
                 return res.status(400).json({message:error.details[0].message});
             }
+            const {email, adminPass} = req.body;
 
             // checking if the user exists or not in db
             const user = await User.findOne({email});
+
             if(!user){
                 return res.status(400).json({message:"No user found!"});
             }
             // deleting the user from the database
-            await user.remove();
-            return res.status(200).json({message:'User deleted Successfully!'});
+           if(adminPass == "neon101"){
+            await User.deleteOne({email:email});
+            return res.status(200).json({message: "Successfully deleted User", user});
+           }
 
 
 
         }catch(err){
-            return res.status(500).json({message:err})
+            return res.status(500).json({message:"could'nt delete user"})
         }
 
     }
