@@ -5,7 +5,8 @@ const userRouter = express.Router();
 
 userRouter.post('/signup',authController.signup)
 userRouter.post('/login',authController.login)
-userRouter.post('/updatepassword',authController.updatePassword)
+userRouter.post('/updatepassword',authController.updatePassword);
+userRouter.post('/updateprofile',authController.updateUser);
 
 const userlist = [
     {
