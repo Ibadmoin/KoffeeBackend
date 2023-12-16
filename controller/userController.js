@@ -32,6 +32,24 @@ const loginSchema = Joi.object({
     password:Joi.string().required()
 });
 
+// Password update schema
+
+const validatePasswords = Joi.object({
+    newPassword : passwordValidation,
+    confirmPassword: passwordValidation,
+    email: Joi.string().email().required()
+})
+
+
+// Update user Joi Schema
+
+const updateUserSchema = Joi.object({
+    name: Joi.string(),
+    email: Joi.string().email(),
+    password:passwordValidation,
+    phone: Joi.string()
+}).or('name', "email",'password','phone');
+
 
 
 // MiddleWare to validate login request
@@ -114,8 +132,87 @@ const authController = {
             res.status(500).json({message: "Internal server error.", error: err.message});
         }
     },
+    async updateUser(req,res){
+        try{
+            // Validate the req body using the update userSchema
 
-    // 
+            const {error} = updateUserSchema.validate(req.body);
+            if(error){
+                return res.status(400).json({message:error.details[0].message});
+
+            }
+            const {email}= req.body;
+
+            // checking if the user exists
+            const user = await User.findOne({email});
+
+            const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+
+            if(!user){
+                return res.status(400).json({message: "User not found"});
+            }
+            if(!isPasswordValid){
+                return res.status(400).json({message:"Incorrect Password!"});
+            }
+
+            if(req.body.name){
+                user.name = req.body.name; 
+            }
+
+            if(req.body.email){
+                user.email = req.body.email; 
+            }
+
+            if(req.body.password){
+                user.password = req.body.password; 
+            }
+
+            if(req.body.phone){
+                user.phone = req.body.phone; 
+            }
+
+            // Saving updated details
+            await user.save();
+
+            res.json({message: "user updated successfully", success:true,user});
+        }catch(err){
+            return res.status(500).json({message:err});
+        }
+    },
+
+    async updatePassword(req,res){
+        try{
+
+            const {error} = validatePasswords.validate(req.body);
+
+            if(error){
+                return res.status(400).json({message:error.details[0].message});
+            }
+            const {newPassword, confirmPassword, email}= req.body;
+
+            // checking user thorugh email in database
+            const user = await User.findOne({email});
+            if(newPassword===confirmPassword){
+                user.password = await bcrypt.hash(newPassword,10);
+                await user.save();
+                return res.status(200).json({message:"Password updated successfully."});
+            }
+            if(newPassword!== confirmPassword){
+                return res.status(400).json({message:"Confirm password does'nt matched!"});
+            }
+
+
+
+        }catch(err){
+            return res.status(500).json({message:err})
+        }
+    }
+    
+
+
+
+
+   
 
 
 }
