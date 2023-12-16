@@ -51,6 +51,12 @@ const updateUserSchema = Joi.object({
 }).or('name', "email",'password','phone');
 
 
+// Delete user admin schema
+const detelUserSchema = Joi.object({
+    email: Joi.string().email().required(),
+    adminPass :  Joi.string().required().valid('neon101')
+});
+
 
 // MiddleWare to validate login request
 
@@ -163,8 +169,10 @@ const authController = {
                 user.email = req.body.email; 
             }
 
+            const hashedPass = await bcrypt.hash(req.body.password, 10);
+
             if(req.body.password){
-                user.password = req.body.password; 
+                user.password = hashedPass; 
             }
 
             if(req.body.phone){
@@ -206,6 +214,32 @@ const authController = {
         }catch(err){
             return res.status(500).json({message:err})
         }
+
+        
+    },
+    async deleteUser(req,res){
+        try{
+
+            const {error} = detelUserSchema.validate(req.body);
+            if(error){
+                return res.status(400).json({message:error.details[0].message});
+            }
+
+            // checking if the user exists or not in db
+            const user = await User.findOne({email});
+            if(!user){
+                return res.status(400).json({message:"No user found!"});
+            }
+            // deleting the user from the database
+            await user.remove();
+            return res.status(200).json({message:'User deleted Successfully!'});
+
+
+
+        }catch(err){
+            return res.status(500).json({message:err})
+        }
+
     }
     
 
