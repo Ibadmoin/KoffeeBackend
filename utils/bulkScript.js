@@ -61,7 +61,7 @@ async function bulkUpload() {
                     price,
                     volume,
                     stars,
-                    description,
+                    desc,
                     imageUrl: cloudinaryResponse.secure_url,
                 });
 
