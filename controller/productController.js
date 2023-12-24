@@ -29,17 +29,20 @@ const productController = {
         
         }
     },
-    async getSyrups(req,res){
-        try{
-            const products = await Product.find({category: "Syrups"});
-            res.status(200).json({success:true,products});
-        }catch(err){
-           console.log("error=>",err);
-           res.status(500).json({success: false, error:"Internal server error"})
-
-
+  async getCategory(req,res){
+    try{
+        const {category}= req.query;
+        if(!category){
+            return res.status(400).json({success:false, error: "Category parameter is required"});
         }
+        const products = await Product.find({category:"milk"});
+        return res.status(200).json({success:true, products});
+
+    }catch(err){
+        console.log("Error=>",err);
+        return res.status(500).json({success:false, error:"Internal server error"});
     }
+  }
 }
 
 

@@ -32,7 +32,7 @@ productRouter.post('/upload', upload.single('image'), async (req, res) => {
 productRouter.get('/',productController.AllProducts);
 // getting featured products
 productRouter.get('/featured', productController.featuredProducts);
-// getting Syrups products
-productRouter.get("/syrups",productController.getSyrups);
+// getting category products
+productRouter.get("/getcategories",productController.getCategory);
 
 module.exports = productRouter;
