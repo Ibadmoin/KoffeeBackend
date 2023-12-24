@@ -29,14 +29,7 @@ productRouter.post('/upload', upload.single('image'), async (req, res) => {
 });
 
 // Get all products
-productRouter.get('/', async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.status(200).json(products);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+productRouter.get('/',productController.AllProducts);
 // getting featured products
 productRouter.get('/featured', productController.featuredProducts)
 
