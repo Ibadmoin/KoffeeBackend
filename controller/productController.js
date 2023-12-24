@@ -28,6 +28,17 @@ const productController = {
             res.status(500).json({error:err.message})
         
         }
+    },
+    async getSyrups(req,res){
+        try{
+            const products = await Product.find({category: "Syrups"});
+            res.status(200).json({success:true,products});
+        }catch(err){
+           console.log("error=>",err);
+           res.status(500).json({success: false, error:"Internal server error"})
+
+
+        }
     }
 }
 

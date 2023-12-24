@@ -31,6 +31,8 @@ productRouter.post('/upload', upload.single('image'), async (req, res) => {
 // Get all products
 productRouter.get('/',productController.AllProducts);
 // getting featured products
-productRouter.get('/featured', productController.featuredProducts)
+productRouter.get('/featured', productController.featuredProducts);
+// getting Syrups products
+productRouter.get("/syrups",productController.getSyrups);
 
 module.exports = productRouter;
