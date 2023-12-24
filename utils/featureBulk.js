@@ -44,7 +44,7 @@ async function bulkUpload() {
 
         console.log('Connected to MongoDB');
 
-        const data = await fs.readFile('./product2.json', 'utf8');
+        const data = await fs.readFile('./product.json', 'utf8');
         const jsonData = JSON.parse(data);
         const products = jsonData.products;
 
@@ -65,7 +65,7 @@ async function bulkUpload() {
                     stars,
                     description,
                     category,
-                    featured: false,
+                    featured: true,
                     imageUrl: cloudinaryResponse.secure_url,
                 });
 

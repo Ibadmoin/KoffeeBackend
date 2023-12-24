@@ -1,50 +1,94 @@
 {
-    "products": [
-      {
-        "id": 1,
-        "name": "Black Coffee",
-        "price": "25.50",
-        "volume": "116 ml",
-        "stars": "4.6",
-        "image": "../assets/images/coffee1.png",
-        "desc": "The taste of coffee can vary depending on factors such as the type of beans, roast level, brewing method, and the addition of any flavors or sweeteners."
+  "products": [
+    {
+      "id": 1,
+      "name": "Black Coffee",
+      "prices": {
+        "small": 3.50,
+        "medium": 4.25,
+        "large": 5.75
       },
-      {
-        "id": 2,
-        "name": "Cappuccino",
-        "price": "15.50",
-        "volume": "110 ml",
-        "stars": "4.3",
-        "image": "../assets/images/coffee2.png",
-        "desc": "The taste of coffee can vary depending on factors such as the type of beans, roast level, brewing method, and the addition of any flavors or sweeteners."
+      "volumes": {
+        "small": "6 oz",
+        "medium": "9 oz",
+        "large": "18 oz"
       },
-      {
-        "id": 3,
-        "name": "Espresso",
-        "price": "30.00",
-        "volume": "100 ml",
-        "stars": "4.0",
-        "image": "../assets/images/coffee3.png",
-        "desc": "The taste of coffee can vary depending on factors such as the type of beans, roast level, brewing method, and the addition of any flavors or sweeteners."
+      "stars": "4.6",
+      "image": "../assets/images/coffee1.png",
+      "description": "Experience the bold and robust flavor of our classic Black Coffee. Sourced from the finest coffee beans and carefully brewed to perfection.",
+      "category": "coffee"
+    },
+    {
+      "id": 2,
+      "name": "Cappuccino",
+      "prices": {
+        "small": 15.50,
+        "medium": 19.99,
+        "large": 24.99
       },
-      {
-        "id": 4,
-        "name": "Latte",
-        "price": "10.30",
-        "volume": "80 ml",
-        "stars": "3.5",
-        "image": "../assets/images/coffee4.png",
-        "desc": "The taste of coffee can vary depending on factors such as the type of beans, roast level, brewing method, and the addition of any flavors or sweeteners."
+      "volumes": {
+        "small": "110 ml",
+        "medium": "180 ml",
+        "large": "300 ml"
       },
-      {
-        "id": 5,
-        "name": "Mocha",
-        "price": "23.10",
-        "volume": "120 ml",
-        "stars": "4.7",
-        "image": "../assets/images/coffee5.png",
-        "desc": "The taste of coffee can vary depending on factors such as the type of beans, roast level, brewing method, and the addition of any flavors or sweeteners."
-      }
-    ]
-  }
-  
+      "stars": "4.3",
+      "image": "../assets/images/coffee2.png",
+      "description": "Indulge in the rich and creamy delight of our Cappuccino. A perfect blend of espresso, steamed milk, and frothy foam for a luxurious coffee experience.",
+      "category": "coffee"
+    },
+    {
+      "id": 3,
+      "name": "Espresso",
+      "prices": {
+        "small": 30.00,
+        "medium": 35.99,
+        "large": 42.99
+      },
+      "volumes": {
+        "small": "100 ml",
+        "medium": "150 ml",
+        "large": "250 ml"
+      },
+      "stars": "4.0",
+      "image": "../assets/images/coffee3.png",
+      "description": "Elevate your senses with the intense and concentrated flavor of our Espresso. Specially crafted for those who appreciate the pure essence of coffee.",
+      "category": "coffee"
+    },
+    {
+      "id": 4,
+      "name": "Latte",
+      "prices": {
+        "small": 10.30,
+        "medium": 12.99,
+        "large": 15.99
+      },
+      "volumes": {
+        "small": "80 ml",
+        "medium": "120 ml",
+        "large": "150 ml"
+      },
+      "stars": "3.5",
+      "image": "../assets/images/coffee4.png",
+      "description": "Savor the smooth and velvety goodness of our Latte. A harmonious blend of espresso and steamed milk, topped with a creamy layer for a delightful taste.",
+      "category": "coffee"
+    },
+    {
+      "id": 5,
+      "name": "Mocha",
+      "prices": {
+        "small": 23.10,
+        "medium": 28.99,
+        "large": 35.99
+      },
+      "volumes": {
+        "small": "120 ml",
+        "medium": "180 ml",
+        "large": "250 ml"
+      },
+      "stars": "4.7",
+      "image": "../assets/images/coffee5.png",
+      "description": "Indulge in the irresistible fusion of chocolate and coffee with our Mocha. A decadent treat that combines the richness of cocoa with the boldness of espresso.",
+      "category": "coffee"
+    }
+  ]
+}

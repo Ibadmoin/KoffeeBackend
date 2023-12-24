@@ -1,0 +1,72 @@
+{
+  "products": [
+    {
+      "name": "Caramel syrup",
+      "image": "../assets/images/syrups/Caramel.jpg",
+      "prices": {
+        "small": 39.99,
+        "medium": 49.99,
+        "large": 59.99
+      },
+      "volumes": {
+        "small": "120 ml",
+        "medium": "250 ml",
+        "large": "500 ml"
+      },
+      "stars": "4.7",
+      "description": "The taste of caramel which energizes your day",
+      "category": "Syrups"
+    },
+    {
+      "name": "Chocolate syrup",
+      "image": "../assets/images/syrups/Chocolate.jpg",
+      "prices": {
+        "small": 26.10,
+        "medium": 34.99,
+        "large": 44.99
+      },
+      "volumes": {
+        "small": "120 ml",
+        "medium": "250 ml",
+        "large": "500 ml"
+      },
+      "stars": "4.7",
+      "description": "The taste of chocolate that delights your senses",
+      "category": "Syrups"
+    },
+    {
+      "name": "Vanilla syrup",
+      "image": "../assets/images/syrups/Vanilla.jpg",
+      "prices": {
+        "small": 24.99,
+        "medium": 32.99,
+        "large": 42.99
+      },
+      "volumes": {
+        "small": "120 ml",
+        "medium": "250 ml",
+        "large": "500 ml"
+      },
+      "stars": "4.7",
+      "description": "The sweet and aromatic flavor of vanilla",
+      "category": "Syrups"
+    },
+    {
+      "name": "Hazelnut syrup",
+      "image": "../assets/images/syrups/Hazelnut.jpg",
+      "prices": {
+        "small": 40.59,
+        "medium": 49.99,
+        "large": 59.99
+      },
+      "volumes": {
+        "small": "120 ml",
+        "medium": "250 ml",
+        "large": "500 ml"
+      },
+      "stars": "4.7",
+      "description": "The rich and nutty taste of hazelnut",
+      "category": "Syrups"
+    }
+  ]
+}
