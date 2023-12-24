@@ -35,7 +35,7 @@ const productController = {
         if(!category){
             return res.status(400).json({success:false, error: "Category parameter is required"});
         }
-        const products = await Product.find({category});
+        const products = await Product.find({category:category});
         return res.status(200).json({success:true, products});
 
     }catch(err){
