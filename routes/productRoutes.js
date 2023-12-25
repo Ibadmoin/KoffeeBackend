@@ -34,5 +34,7 @@ productRouter.get('/',productController.AllProducts);
 productRouter.get('/featured', productController.featuredProducts);
 // getting category products
 productRouter.get("/getcategories",productController.getCategory);
+productRouter.get("/search",productController.Search);
+
 
 module.exports = productRouter;
