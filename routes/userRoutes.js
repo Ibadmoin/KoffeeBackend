@@ -1,9 +1,11 @@
 const express = require('express');
 const authController = require("../controller/userController");
 const userRouter = express.Router();
+const jwtConfig = require('../utils/jwt');
 
 
-userRouter.post('/signup',authController.signup)
+userRouter.post('/register',authController.register);
+userRouter.get('/verify/:token',authController.verifyEmail)
 userRouter.post('/login',authController.login)
 userRouter.post('/updatepassword',authController.updatePassword);
 userRouter.post('/updateprofile',authController.updateUser);

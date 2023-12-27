@@ -2,16 +2,18 @@ const User = require("../model/userModel")
 const Joi = require("joi")
 const bcrypt = require("bcrypt")
 const chalk = require('chalk');
-const jwt = require('../utils/jwt')
+const jwt = require('../utils/jwt');
+const nodemailer = require('nodemailer');
+const sendVerificationEmail = require('../globalFunctions/sendVerification');
 
 
 
 // Password validation schema Through joi
 const passwordValidation = Joi.string()
-  .pattern(/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}":;<>,.?~\\-]).{8,}$/)
+  .pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}":;<>,.?~\\-]).{8,}$/)
   .required()
   .messages({
-    'string.pattern.base': 'Password must contain at least 1 uppercase letter, 1 number, 1 special character, and be at least 8 characters long.',
+    'string.pattern.base': 'Password must contain at least 1 uppercase letter, 1 special character, and be at least 8 characters long.',
     'any.required': 'Password is required.',
   });
 
@@ -19,7 +21,7 @@ const passwordValidation = Joi.string()
 // Define schema for user signup
 
 const signupSchema = Joi.object({
-    name: Joi.string().required(),
+    userName: Joi.string().required(),
     email: Joi.string().email().required(),
     password: passwordValidation,
     phone: Joi.string().required(),
@@ -61,7 +63,7 @@ const detelUserSchema = Joi.object({
 // MiddleWare to validate login request
 
 const authController = {
-    async signup(req, res){
+    async register(req, res){
         try{
             // Validating the req body using thje signup schema
             const { error} = signupSchema.validate(req.body);
@@ -70,7 +72,7 @@ const authController = {
 
             }
 
-            const {name, email, password, phone} = req.body;
+            const {userName, email, password, phone} = req.body;
             // Check if the user already exists
             const existingUser = await User.findOne({email});
             if(existingUser){
@@ -81,18 +83,21 @@ const authController = {
             const hashedPass = await bcrypt.hash(password,10);
             // Creating new user in database
             const newUser = new User({
-                name,
+                userName,
                 email, 
                 password: hashedPass,
                 phone
             });
             
-            const token = jwt.sign(email);
 
 
             // Save the user in the database
             const user = await newUser.save();
-            return res.status(200).json({message:"User registered.",user, token})
+
+            const verificationToken = jwt.sign(email);
+            sendVerificationEmail(user);
+
+            return res.status(200).json({message:{head:'Registration successful.',text:'please check your email for verification.'},user, verificationToken})
         }catch (err){
             res.status(500).json({message: "Internal server eroor.", error: err.message});
         }
@@ -244,7 +249,32 @@ const authController = {
             return res.status(500).json({message:"could'nt delete user"})
         }
 
+    },
+   async verifyEmail(req,res){
+    try{
+        const token = req.params.token;
+        console.log(req.params)
+        console.log("token here",token)
+        const decodedToken = jwt.verifyEmailToken(token);
+        console.log("Decorded Token", decodedToken)
+        const user = await User.findOne({email: decodedToken});
+        if(!user){
+            return res.status(404).json({message:"User not found"});
+
+        }
+        user.verified = true;
+        await user.save();
+        return res.status(200).json({message:'Account verified successfully',user});
+        
+    }catch(err){
+        if(err.name=== "TokenExpiredError"){
+            return res.status(400).json({message:'Token has expired'})
+        }else{
+            return res.status(500).json({message:"Internal server error",error: err.message})
+        }
     }
+   
+    } 
     
 
 

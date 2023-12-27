@@ -49,13 +49,14 @@ const productController = {
 
   async Search(req, res) {
     try {
-      const { category, term } = req.query;
+      const {term } = req.query;
       const regex = term ? new RegExp(term.trim(), "i") : undefined;
   
       
   
       const suggestions = await Product.find({
         name: regex,
+      
       }).limit(5);
       if(suggestions.length===0){
         return res.status(404).json({success:false, message:"No product suggestion found!"})
