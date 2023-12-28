@@ -6,7 +6,8 @@ const jwtConfig = require('../utils/jwt');
 
 userRouter.post('/register',authController.register);
 userRouter.get('/verify/:token',authController.verifyEmail)
-userRouter.post('/login',authController.login)
+userRouter.post('/login',authController.login);
+userRouter.post('/forgetpassword',authController.forgetPassword)
 userRouter.post('/updatepassword',authController.updatePassword);
 userRouter.post('/updateprofile',authController.updateUser);
 userRouter.post('/deleteUser',authController.deleteUser)

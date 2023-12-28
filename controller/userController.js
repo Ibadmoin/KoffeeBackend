@@ -5,7 +5,8 @@ const chalk = require('chalk');
 const jwt = require('../utils/jwt');
 const nodemailer = require('nodemailer');
 const sendVerificationEmail = require('../globalFunctions/sendVerification');
-
+const otpGenerator = require('otp-generator');
+const sendOtpEmail = require('../globalFunctions/sendOtpEmail');
 
 
 // Password validation schema Through joi
@@ -57,6 +58,17 @@ const updateUserSchema = Joi.object({
 const detelUserSchema = Joi.object({
     email: Joi.string().email().required(),
     adminPass :  Joi.string().required().valid('neon101')
+});
+
+const forgetPasswordSchema = Joi.object({
+    email: Joi.string().email().required(),
+});
+
+const resetPasswordSchema = Joi.object({
+    newPassword: passwordValidation,
+    confirmPassword: passwordValidation,
+    otp: Joi.string().required(),
+    email: Joi.string().email().required(),
 });
 
 
@@ -120,6 +132,9 @@ const authController = {
 
             if(!user){
                 return res.status(400).json({message:"Invalid email or password"});
+            }
+            if (!user.verified) {
+                return res.status(400).json({ message: "Account not verified. Please check your email for verification." });
             }
 
             // Comparing provided Password with Stored hashed password
@@ -274,7 +289,40 @@ const authController = {
         }
     }
    
-    } 
+    },
+    async forgetPassword(req,res){
+        try{
+            const {error} = forgetPasswordSchema.validate(req.body);
+            if(error){
+                return res.status(400).json({message:error.details[0].message})
+            };
+
+            const {email}= req.body;
+
+            const user = await User.findOne({email});
+            if(!user){
+                return res.status(404).json({message:'User not found.'});
+            };
+
+            const otp = otpGenerator.generate(4, {digits:true, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false});
+
+            user.passwordResetOtp = otp;
+            await user.save();
+
+            sendOtpEmail(user, otp);
+            return res.status(200).json({message:"Password reset OTP sent.Check your email."});
+
+
+        }catch(err){
+            res.status(500).json({message:'Internal server error', error:err.message});
+
+        }
+    },
+
+  
+
+   
+    
     
 
 
