@@ -2,6 +2,7 @@ const express = require('express')
 const ConnectDb = require('./db/db');
 const cors = require('cors');
 const chalk = require('chalk');
+const path = require('path')
 const app = express()
 require('dotenv').config({path:'./.env'})
 const Port = 8000 || process.env.Port;
@@ -10,7 +11,10 @@ const dataRouter = require('./routes/dataRoutes');
 const productRouter = require('./routes/productRoutes');
 
 app.use(express.json())
-app.use(cors())
+app.use(cors());
+// Serve static files from the 'redirects' folder
+app.use(express.static(path.join(__dirname, 'redirects')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 
 

@@ -7,7 +7,14 @@ const nodemailer = require('nodemailer');
 const sendVerificationEmail = require('../globalFunctions/sendVerification');
 const otpGenerator = require('otp-generator');
 const sendOtpEmail = require('../globalFunctions/sendOtpEmail');
+const path = require('path');
+require('dotenv').config({ path: '../.env' });
 
+
+
+const Constants ={
+    Domain : process.env.DOMAIN_URL,
+}
 
 // Password validation schema Through joi
 const passwordValidation = Joi.string()
@@ -279,7 +286,9 @@ const authController = {
         }
         user.verified = true;
         await user.save();
-        return res.status(200).json({message:'Account verified successfully',user});
+        console.log("User clicked...");
+        console.log(Constants.Domain)
+        return res.redirect(`${Constants.Domain}verification.html`);
         
     }catch(err){
         if(err.name=== "TokenExpiredError"){
