@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email temp</title>
+    <style>
+        /* Add your custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" border="0">
+                    <!-- Header Section -->
+                    <tr>
+                        <td bgcolor="#ffffff" style="padding: 20px 0;">
+                            <h1 style="font-size: 3em; text-align: center; color: #d4a574;">Koffee</h1>
+                        </td>
+                    </tr>
+
+                    <!-- Image Section -->
+                    <tr>
+                        <td bgcolor="#8c5319" style="padding: 20px; text-align: center;">
+                            <img style="width: 60px;" src="https://example.com/assets/mail.png" alt="Mail Icon">
+                            <h4 style="text-align: center; color: white; text-transform: uppercase; letter-spacing: 5px;">Thanks For Signing Up!</h4>
+                            <h1 style="text-align: center; color: white;">Verify Your E-Mail Address</h1>
+                        </td>
+                    </tr>
+
+                    <!-- Content Section -->
+                    <tr>
+                        <td style="padding: 20px; color: black;">
+                            <p style="text-align: center; font-size: 16px; font-weight: 500;">Hi,</p>
+                            <p style="text-align: center; font-size: 16px; font-weight: 500; padding: 20px;">You're almost ready to get started. Please click on the button below to verify your email address and enjoy exclusive cleaning services with us!</p>
+                            <div style="text-align: center;">
+                                <a href="https://www.google.com" style="text-decoration: none;">
+                                    <button style="border: none; padding: 10px; border-radius: 5px; color: white; background-color: #d4a574; cursor: pointer;">VERIFY YOUR EMAIL</button>
+                                </a>
+                            </div>
+                            <p style="text-align: center; font-size: 16px; font-weight: 500; color: black;">Thanks.<br/>The Koffee Team.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td bgcolor="#E5EAF5" style="padding: 20px; text-align: center;">
+                            <h4 style="text-align: center; color: #8c5319; padding: 0;">Get in touch</h4>
+                            <a style="color: #8c5319; text-align: center; text-decoration: underline;" href="mailto:ibadmoin@gmail.com">info@koffee.com</a>
+                            <div style="margin-top: 10px; width: 180px; height: 40px; padding: 10px; display: inline-block;">
+                                <a href="https://www.facebook.com/profile.php?id=100008452442648"><img style="width: 30px; cursor: pointer;" src="https://example.com/assets/facebook.png" alt="Facebook"></a>
+                                <a href="https://www.linkedin.com/in/ibad-moin-2b43a8253/"><img style="width: 30px; cursor: pointer;" src="https://example.com/assets/linkedin.png" alt="LinkedIn"></a>
+                                <a href="https://www.instagram.com/ibad_moin/"><img style="width: 30px; cursor: pointer;" src="https://example.com/assets/instagram.png" alt="Instagram"></a>
+                                <a href="https://github.com/ibadmoin"><img style="width: 30px; cursor: pointer;" src="https://example.com/assets/github.png" alt="GitHub"></a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Copyright Section -->
+                    <tr>
+                        <td bgcolor="#8c5319" style="padding: 20px; text-align: center; color: white;">
+                            <p style="text-align: center;">Copyrights © Kofee All Rights Reserved</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+
