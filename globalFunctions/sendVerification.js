@@ -127,8 +127,8 @@ const jwt = require('../utils/jwt')
     await new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
-                console.error(`Error sending verification email:`, err);
-                console.error(err);
+                console.log(`Error sending verification email:`, err);
+                console.log(err);
                 reject(err);
             } else {
                 resolve(info);
