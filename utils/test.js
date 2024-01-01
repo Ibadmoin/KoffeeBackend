@@ -3,6 +3,8 @@
 // const testString1 = 'Caramel syrup';
 // const testString2 = 'Caramel syrups';
 
+const sendVerificationEmail = require("../globalFunctions/sendVerification");
+
 // // Remove trailing "s" if present
 // const searchTerm = term.replace(/\s+$/, '');
 // const regexWithOptionalS = new RegExp(`${searchTerm}(s)?`, "i");
@@ -12,9 +14,15 @@
 
 
 
-const otpGenerator = require('otp-generator')
+// const otpGenerator = require('otp-generator')
 
 
-for(let i = 0; i<=10;i++){
-    console.log(otp)
-}
+// for(let i = 0; i<=10;i++){
+//     console.log(otp)
+// }
+
+// user = {
+//     email :"ibadmoin@gmail.com"
+// }
+
+// sendVerificationEmail(user)

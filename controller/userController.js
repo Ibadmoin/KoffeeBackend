@@ -119,6 +119,7 @@ const authController = {
             const user = await newUser.save();
 
             const verificationToken = jwt.sign(email);
+            console.log("sending email")
             sendVerificationEmail(user);
 
             return res.status(200).json({message:{head:'Registration successful.',text:'please check your email for verification.'},user, verificationToken})
