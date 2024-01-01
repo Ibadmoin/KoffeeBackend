@@ -95,7 +95,12 @@ const authController = {
             // Check if the user already exists
             const existingUser = await User.findOne({email});
             if(existingUser){
-                return res.status(400).json({message: "email already exists."})
+                if(!existingUser.verified){
+
+                    return res.status(400).json({message:{head:'Email already Registered.',text:'Please check your email for verification.'}})
+                }else{
+                    return res.status(400).json({message: "Email already exists."})
+                }
             }
 
             // hashig the password
