@@ -292,7 +292,7 @@ const authController = {
         }
         user.verified = true;
         await user.save();
-        // console.log("User clicked...");
+        console.log("User clicked...");
         console.log(Constants.Domain)
         return res.redirect(`${Constants.Domain}verification.html`);
         

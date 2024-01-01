@@ -5,7 +5,7 @@ require('dotenv').config({ path: dotenvPath });
 const jwt = require('../utils/jwt')
 
 
- function sendVerificationEmail(user){
+ async function sendVerificationEmail(user){
     console.log("preparing to send email..")
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -124,15 +124,20 @@ const jwt = require('../utils/jwt')
         `
 
     };
-
-    transporter.sendMail(mailOptions, (error, info)=>{
-        if(error){
-            console.error(`Error sending verification email:`,error);
-
-        }else{
+    await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (err, info) => {
+          if (err) {
+              console.error(`Error sending verification email:`,error);
+            console.error(err);
+            reject(err);
+          } else {
+            resolve(info);
             console.log('Verification email sent:', info.response);
-        }
-    });
+          }
+        });
+      });
+
+  
 }
 
 
