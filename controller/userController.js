@@ -119,7 +119,7 @@ const authController = {
             const user = await newUser.save();
 
             const verificationToken = jwt.sign(email);
-            console.log("sending email",user);
+            
             sendVerificationEmail(user);
 
             return res.status(200).json({message:{head:'Registration successful.',text:'please check your email for verification.'},user, verificationToken})
@@ -292,7 +292,7 @@ const authController = {
         }
         user.verified = true;
         await user.save();
-        console.log("User clicked...");
+        // console.log("User clicked...");
         console.log(Constants.Domain)
         return res.redirect(`${Constants.Domain}verification.html`);
         
