@@ -120,7 +120,7 @@ const authController = {
 
             const verificationToken = jwt.sign(email);
             
-            sendVerificationEmail(user);
+           await sendVerificationEmail(user);
 
             return res.status(200).json({message:{head:'Registration successful.',text:'please check your email for verification.'},user, verificationToken})
         }catch (err){
