@@ -147,7 +147,7 @@ const authController = {
                 return res.status(400).json({message:"Invalid email or password"});
             }
             if (!user.verified) {
-                return res.status(400).json({ message: "Account not verified. Please check your email for verification." });
+                return res.status(400).json({ message:{head:"Account not verified.",text:"Please check your email for verification."}});
             }
 
             // Comparing provided Password with Stored hashed password
