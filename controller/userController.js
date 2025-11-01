@@ -44,21 +44,20 @@ const loginSchema = Joi.object({
 
 // Password update schema
 
-const validatePasswords = Joi.object({
-    newPassword : passwordValidation,
+// ✅ NEW: Schema for Logged-In User Changing Password (Requires current password)
+// NEW: Schema for Logged-In User Changing Password
+const changePasswordSchema = Joi.object({
+    currentPassword: Joi.string().required(), // <--- Must be defined as required!
+    newPassword: passwordValidation,
     confirmPassword: passwordValidation,
-    email: Joi.string().email().required()
-})
-
-
-// Update user Joi Schema
-
+});
+// Update user Joi Schema (Your original updateUserSchema remains the same)
 const updateUserSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string().email(),
-    password:passwordValidation,
+    password: passwordValidation,
     phone: Joi.string()
-}).or('name', "email",'password','phone');
+}).or('name', "email", 'password', 'phone');
 
 
 // Delete user admin schema
@@ -74,10 +73,9 @@ const forgetPasswordSchema = Joi.object({
 const resetPasswordSchema = Joi.object({
     newPassword: passwordValidation,
     confirmPassword: passwordValidation,
-    otp: Joi.string().required(),
+    otp: Joi.string().length(4).required().messages({'string.length': 'OTP must be 4 digits.'}), // Added length check
     email: Joi.string().email().required(),
 });
-
 
 // MiddleWare to validate login request
 
@@ -220,37 +218,8 @@ const authController = {
             return res.status(500).json({message:err});
         }
     },
-
-    async updatePassword(req,res){
-        try{
-
-            const {error} = validatePasswords.validate(req.body);
-
-            if(error){
-                return res.status(400).json({message:error.details[0].message});
-            }
-            const {newPassword, confirmPassword, email}= req.body;
-
-            // checking user thorugh email in database
-            const user = await User.findOne({email});
-            if(newPassword===confirmPassword){
-                user.password = await bcrypt.hash(newPassword,10);
-                await user.save();
-                return res.status(200).json({message:"Password updated successfully."});
-            }
-            if(newPassword!== confirmPassword){
-                return res.status(400).json({message:"Confirm password does'nt matched!"});
-            }
-
-
-
-        }catch(err){
-            return res.status(500).json({message:err})
-        }
-
-        
-    },
-    async deleteUser(req,res){
+    // delete User
+      async deleteUser(req,res){
         try{
 
             const {error} = detelUserSchema.validate(req.body);
@@ -278,7 +247,8 @@ const authController = {
         }
 
     },
-   async verifyEmail(req,res){
+    // verify email function
+    async verifyEmail(req,res){
     try{
         const token = req.params.token;
         console.log(req.params)
@@ -294,7 +264,7 @@ const authController = {
         await user.save();
         console.log("User clicked...");
         console.log(Constants.Domain)
-        return res.redirect(`${Constants.Domain}verification.html`);
+        return res.redirect(`${Constants.Domain}/verification.html`);
         
     }catch(err){
         if(err.name=== "TokenExpiredError"){
@@ -305,53 +275,124 @@ const authController = {
     }
    
     },
-    async forgetPassword(req,res){
-        try{
-            const {error} = forgetPasswordSchema.validate(req.body);
-            if(error){
-                return res.status(400).json({message:error.details[0].message})
-            };
+async forgetPassword(req, res) {
+        try {
+            const { error } = forgetPasswordSchema.validate(req.body);
+            if (error) {
+                return res.status(400).json({ message: error.details[0].message });
+            }
 
-            const {email}= req.body;
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+            
+            if (!user) {
+                // Return a generic success message for security reasons
+                return res.status(200).json({ message: 'If a matching user was found, a password reset OTP has been sent.' });
+            }
 
-            const user = await User.findOne({email});
-            if(!user){
-                return res.status(404).json({message:'User not found.'});
-            };
+            const otp = otpGenerator.generate(4, { digits: true, upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false });
 
-            const otp = otpGenerator.generate(4, {digits:true, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false});
-
+            // ✅ Save OTP and set Expiration to 10 minutes
             user.passwordResetOtp = otp;
+            user.passwordResetExpires = Date.now() + 600000; // 10 minutes (600,000 ms)
             await user.save();
 
-            sendOtpEmail(user, otp);
-            return res.status(200).json({message:"Password reset OTP sent.Check your email."});
+            await sendOtpEmail(user, otp);
+            return res.status(200).json({ message: "Password reset OTP sent. Check your email." });
 
-
-        }catch(err){
-            res.status(500).json({message:'Internal server error', error:err.message});
-
+        } catch (err) {
+            console.error('Forget Password Error:', err);
+            res.status(500).json({ message: 'Internal server error', error: err.message });
         }
     },
 
-  
+    // 2. 🔄 Reset Password (Completes OTP flow - NEW FUNCTION)
+    async resetPassword(req, res) {
+        try {
+            const { error } = resetPasswordSchema.validate(req.body);
+            if (error) {
+                return res.status(400).json({ message: error.details[0].message });
+            }
 
-   
+            const { newPassword, confirmPassword, otp, email } = req.body;
+
+            // ✅ Find user by email, matching OTP, and ensure OTP is NOT expired
+            const user = await User.findOne({
+                email,
+                passwordResetOtp: otp,
+                passwordResetExpires: { $gt: Date.now() } // $gt means "greater than" current time (i.e., not expired)
+            });
+
+            if (!user) {
+                // Covers both invalid OTP and expired OTP
+                return res.status(400).json({ message: "Invalid or expired OTP." });
+            }
+            
+            if (newPassword !== confirmPassword) {
+                return res.status(400).json({ message: "New and confirm password do not match." });
+            }
+
+            // Hash and Save the new password
+            user.password = await bcrypt.hash(newPassword, 10);
+            
+            // ✅ Clear the OTP fields after successful use
+            user.passwordResetOtp = undefined;
+            user.passwordResetExpires = undefined; 
+            await user.save();
+
+            return res.status(200).json({ message: "Password reset successfully. You can now log in." });
+
+        } catch (err) {
+            console.error("Reset Password Error:", err);
+            return res.status(500).json({ message: 'Internal server error during password reset.' });
+        }
+    },
     
-    
+    // 3. 📝 Update Password (Logged-In User Change)
+    // NOTE: Requires a dedicated Authentication Middleware to set req.userEmail
+    async updatePassword(req, res) {
+        try {
+            // Use the new schema that requires the current password
+            const { error } = changePasswordSchema.validate(req.body);
+            if (error) {
+                return res.status(400).json({ message: error.details[0].message });
+            }
 
+            const { currentPassword, newPassword, confirmPassword } = req.body;
+            
+            // 1. Get user email from the JWT (SET BY AUTH MIDDLEWARE)
+            const email = req.userEmail; // <-- ENSURE YOUR MIDDLEWARE SETS THIS!
 
+            // 2. Find the user
+            const user = await User.findOne({ email });
+            if (!user) {
+                return res.status(404).json({ message: "User not found." });
+            }
 
+            // 3. Verify the CURRENT password
+            const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+            if (!isCurrentPasswordValid) {
+                return res.status(400).json({ message: "Incorrect current password." });
+            }
 
-   
+            // 4. New Password Confirmation Check
+            if (newPassword !== confirmPassword) {
+                return res.status(400).json({ message: "New and confirm password do not match." });
+            }
 
+            // 5. Hash and Save the new password
+            user.password = await bcrypt.hash(newPassword, 10);
+            await user.save();
 
-}
+            return res.status(200).json({ message: "Password updated successfully." });
 
-
-
-
-
+        } catch (err) {
+            console.error("Update Password Error:", err);
+            // Handle cases where req.userEmail is missing (middleware failed) or other errors
+            return res.status(500).json({ message: "Internal server error during password update." });
+        }
+    },
+};
 
 
 

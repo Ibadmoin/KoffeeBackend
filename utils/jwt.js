@@ -1,6 +1,12 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken')
+const secretKey = process.env.JWT_SECRET;
 
-const secretKey = "KofeewithNeon"
+// Check if the secret key is defined (good practice)
+if (!secretKey) {
+    console.error("FATAL ERROR: JWT_SECRET is not defined in environment variables.");
+    // You might want to exit the process here in production
+}
 
 const jwtConfig = {
     sign(payload){

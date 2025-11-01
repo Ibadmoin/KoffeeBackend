@@ -5,10 +5,12 @@ const chalk = require('chalk');
 const path = require('path')
 const app = express()
 require('dotenv').config({path:'./.env'})
-const Port = 8000 || process.env.Port;
+const Port = 8000 || process.env.PORT;
 const UserRouter = require('./routes/userRoutes');
 const dataRouter = require('./routes/dataRoutes');
 const productRouter = require('./routes/productRoutes');
+
+console.log(process.env.DOMAIN_URL)
 
 app.use(express.json())
 app.use(cors());

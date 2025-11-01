@@ -14,7 +14,7 @@ const jwt = require('../utils/jwt')
             pass: process.env.EMAIL_PASSWORD
         }
     });
-    const Domain = process.env.DOMAIN_URL+"api/users/verify/"
+    const Domain = process.env.DOMAIN_URL+"/api/users/verify/"
     console.log(Domain)
 
     const verificationLink =jwt.sign(user.email)
