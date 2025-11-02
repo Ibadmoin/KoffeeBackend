@@ -14,6 +14,7 @@ console.log(process.env.DOMAIN_URL)
 
 app.use(express.json())
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 // Serve static files from the 'redirects' folder
 app.use(express.static(path.join(__dirname, 'redirects')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));

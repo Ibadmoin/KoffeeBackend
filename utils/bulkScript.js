@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '../.env' });
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const mongoose = require('mongoose');
 const Product = require('../model/productModel');
 const fs = require('fs').promises;
@@ -11,11 +12,12 @@ const chalk = require('chalk');
 // make sure to upload png images
 // cd utils then node bulkScript.js
 
+console.log(process.env.CLOUDINARY_CLOUD_NAME)
 
 cloudinary.config({ 
-    cloud_name: 'dfhvlndon', 
-    api_key: process.env.CLOUDNARY_KEY, 
-    api_secret: process.env.CLOUDNARY_SECRET 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_KEY, 
+    api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 // Define the CloudinaryStorage
@@ -36,6 +38,10 @@ const upload = multer({
 async function bulkUpload() {
     try {
         const uri = process.env.MONGO_URI;
+        if (!uri) {
+            // Throw an explicit error if the URI is missing
+            throw new Error("FATAL: MONGO_URI is missing. Check your .env file and environment variable name.");
+        }
         console.log(chalk.red(uri))
         await mongoose.connect(uri, {
             useNewUrlParser: true,
